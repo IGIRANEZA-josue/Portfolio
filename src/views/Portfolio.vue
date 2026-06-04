@@ -210,14 +210,24 @@
           >
             <div class="pc-image">
               <img :src="project.img" :alt="project.title" />
-              <div class="pc-overlay" :class="{ active: activeProject === i }">
-                <a :href="project.url || '#'" target="_blank" rel="noopener" class="pc-btn">View Project</a>
+              <!-- WIP overlay -->
+              <div v-if="project.wip" class="pc-overlay pc-overlay-wip" :class="{ active: activeProject === i }">
+                <div class="wip-badge">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Not Yet Finished
+                </div>
+                <p class="wip-sub">Coming soon — work in progress</p>
+              </div>
+              <!-- Normal overlay -->
+              <div v-else class="pc-overlay" :class="{ active: activeProject === i }">
+                <a :href="project.url" target="_blank" rel="noopener" class="pc-btn">View Project</a>
                 <a v-if="project.github" :href="project.github" target="_blank" rel="noopener" class="pc-btn pc-btn-ghost">GitHub</a>
               </div>
             </div>
             <div class="pc-body">
               <div class="pc-tags">
                 <span v-for="tag in project.tags" :key="tag" class="pc-tag">{{ tag }}</span>
+                <span v-if="project.wip" class="pc-tag pc-tag-wip">🚧 In Progress</span>
               </div>
               <h3>{{ project.title }}</h3>
               <p>{{ project.desc }}</p>
@@ -273,8 +283,8 @@
             </div>
             <button type="submit" class="btn-primary form-submit" :class="{ sent: formSent }">
               <span v-if="!formSent">
-                
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>Send Message</svg>
+                Send Message
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
               </span>
               <span v-else>Sent! ✓</span>
             </button>
@@ -419,20 +429,20 @@ export default {
 
       projects: [
         {
-          title: 'AkaziHub',
-          desc:  'Platform connecting job seekers, service providers and customers in one seamless marketplace.',
+          title: 'Beta Tech Solution Limited',
+          desc:  'A full web system for Beta Tech Solution Limited — a technology company delivering modern digital solutions and services.',
           img:   'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800',
           tags:  ['Vue.js', 'Platform', 'UX'],
-          url:   '#',
-          github: 'https://github.com/yourusername/akazihub',
+          url:   'https://github.com/Arnaud090/Beta-tech-web-system',
+          github: 'https://github.com/Arnaud090/Beta-tech-web-system',
         },
         {
-          title: 'Rwanda Tourism',
+          title: 'Tembera Rwanda',
           desc:  "Tourism website showcasing Rwanda's stunning attractions, culture and hospitality.",
           img:   'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
           tags:  ['Vue.js', 'Tourism', 'Design'],
-          url:   '#',
-          github: 'https://github.com/yourusername/rwanda-tourism',
+          url:   'https://github.com/IGIRANEZA-josue/TEMBERURWANDA',
+          github: 'https://github.com/IGIRANEZA-josue/TEMBERURWANDA',
         },
         {
           title: 'School Portal',
@@ -440,7 +450,8 @@ export default {
           img:   'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
           tags:  ['Vue Router', 'Dashboard', 'Education'],
           url:   '#',
-          github: 'https://github.com/yourusername/school-portal',
+          github: null,
+          wip:   true,
         },
       ],
 
@@ -448,7 +459,7 @@ export default {
         {
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
           label: 'Email',
-          value: 'kabundege.jr@example.com',
+          value: 'josue@example.com',
         },
         {
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
@@ -929,6 +940,25 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: center; justify-content: center; gap: 12px;
   opacity: 0; transition: opacity 0.3s;
 }
+.pc-overlay-wip {
+  flex-direction: column; gap: 10px;
+  background: rgba(5,9,26,0.88);
+}
+.wip-badge {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(251,191,36,0.15);
+  border: 1.5px solid rgba(251,191,36,0.5);
+  color: #fbbf24;
+  padding: 12px 24px; border-radius: 50px;
+  font-size: 1rem; font-weight: 700;
+  transform: translateY(10px); transition: transform 0.3s;
+}
+.pc-overlay-wip.active .wip-badge { transform: translateY(0); }
+.wip-sub {
+  font-size: 0.8rem; color: rgba(255,255,255,0.5); letter-spacing: 0.5px;
+  transform: translateY(10px); transition: transform 0.3s 0.05s; opacity: 0;
+}
+.pc-overlay-wip.active .wip-sub { transform: translateY(0); opacity: 1; }
 .pc-overlay.active { opacity: 1; }
 .pc-btn {
   background: var(--accent); color: #fff; border: none;
@@ -947,6 +977,10 @@ a { text-decoration: none; color: inherit; }
 .pc-tag {
   background: rgba(37,99,235,0.1); color: var(--accent2);
   padding: 4px 12px; border-radius: 50px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
+}
+.pc-tag-wip {
+  background: rgba(251,191,36,0.12); color: #fbbf24;
+  border: 1px solid rgba(251,191,36,0.3);
 }
 .pc-body h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
 .pc-body p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
