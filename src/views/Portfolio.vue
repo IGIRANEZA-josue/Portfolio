@@ -227,7 +227,7 @@
             <div class="pc-body">
               <div class="pc-tags">
                 <span v-for="tag in project.tags" :key="tag" class="pc-tag">{{ tag }}</span>
-                <span v-if="project.wip" class="pc-tag pc-tag-wip">🚧 In Progress</span>
+                <span v-if="project.wip" class="pc-tag pc-tag-wip">In Progress</span>
               </div>
               <h3>{{ project.title }}</h3>
               <p>{{ project.desc }}</p>
